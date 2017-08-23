@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Retlang.Channels;
 using Retlang.Core;
 using Retlang.Fibers;
+using RetlangTests.ForBenchmark;
 
 namespace RetlangTests
 {
@@ -47,7 +48,13 @@ namespace RetlangTests
         {
             RunBusyWaitQueue();
         }
-      
+
+        [Test, Explicit]
+        public void ConcurrentQueuePointToPointPerfTestWithStruct() 
+        {
+            RunConcurrentQueue();
+        }
+
         private static void RunBoundedQueue()
         {
             var executor = new BoundedQueue(new PerfExecutor()) { MaxDepth = 10000, MaxEnqueueWaitTimeInMs = 1000 };
@@ -103,6 +110,34 @@ namespace RetlangTests
                 }
             }
         }
+
+        private static void RunConcurrentQueue() 
+        {
+            var executor = new ConcurrentQueue(new PerfExecutor());
+            using (var fiber = new ThreadFiber(executor)) 
+            {
+                fiber.Start();
+                var channel = new Channel<MsgStruct>();
+                const int max = 5000000;
+                var reset = new AutoResetEvent(false);
+                Action<MsgStruct> onMsg = delegate (MsgStruct count)
+                {
+                    if (count.count == max) 
+                    {
+                        reset.Set();
+                    }
+                };
+                channel.Subscribe(fiber, onMsg);
+                using (new PerfTimer(max)) 
+                {
+                    for (var i = 0; i <= max; i++) 
+                    {
+                        channel.Publish(new MsgStruct { count = i });
+                    }
+                    Assert.IsTrue(reset.WaitOne(30000, false));
+                }
+            }
+        }    
 
         [Test, Explicit]
         public void PointToPointPerfTestWithInt()

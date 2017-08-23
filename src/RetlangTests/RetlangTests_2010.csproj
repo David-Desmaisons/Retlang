@@ -75,6 +75,7 @@
     <Compile Include="Examples\AlgebraDemonstration.cs" />
     <Compile Include="Examples\BasicExamples.cs" />
     <Compile Include="Examples\FibonacciDemonstration.cs" />
+    <Compile Include="ForBenchmark\ConcurrentQueue.cs" />
     <Compile Include="PerfSettings.cs" />
     <Compile Include="PerfTests.cs" />
     <Compile Include="PerfTimer.cs" />
@@ -125,6 +126,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="RetlangTests.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
