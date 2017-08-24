@@ -1,5 +1,8 @@
 # Retlang
 
+[![Build status](https://img.shields.io/appveyor/ci/David-Desmaisons/retlang.svg?maxAge=2592000)](https://ci.appveyor.com/project/David-Desmaisons/retlang)
+
+
 Retlang is a high performance C# threading library (see **Jetlang** for a version in Java). The library is intended for use in **message based concurrency** similar to **event based actors in Scala**. The library does not provide remote messaging capabilities. It is designed specifically for high performance in-memory messaging.
 
 # Features
