@@ -3,3 +3,9 @@
 /src/Retlang/obj/Debug
 
 /src/RetlangTests/obj/Debug
+/src/.vs/Retlang_2010
+/src/Retlang/bin
+/src/Retlang/obj
+/src/RetlangTests/bin
+/src/RetlangTests/obj
+/src/WpfExample/bin/

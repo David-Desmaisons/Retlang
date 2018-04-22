@@ -96,6 +96,11 @@
     <Compile Include="Core\DefaultQueue.cs" />
     <Compile Include="Core\DefaultExecutor.cs" />
     <Compile Include="Core\BoundedQueue.cs" />
+    <Compile Include="Core\MpScQueue\BlockingMpscQueue.cs" />
+    <Compile Include="Core\MpScQueue\MpscQueue.cs" />
+    <Compile Include="Core\MpScQueue\Node.cs" />
+    <Compile Include="Core\MpScQueue\SimplifiedEventCount.cs" />
+    <Compile Include="Core\MpScQueue\WaitHandleExtension.cs" />
     <Compile Include="Core\Scheduler.cs" />
     <Compile Include="Core\DefaultThreadPool.cs" />
     <Compile Include="Core\ISubscriptionRegistry.cs" />

@@ -4,6 +4,7 @@ using System.Threading;
 using NUnit.Framework;
 using Retlang.Channels;
 using Retlang.Core;
+using Retlang.Core.MpScQueue;
 using Retlang.Fibers;
 using RetlangTests.ForBenchmark;
 
@@ -17,10 +18,10 @@ namespace RetlangTests
             {
                 action();
             }
-            if (toExecute.Count < 10000)
-            {
-                Thread.Sleep(1);
-            }
+            //if (toExecute.Count < 10000)
+            //{
+            //    Thread.Sleep(1);
+            //}
         }
 
         public void Execute(Action toExecute)
@@ -53,6 +54,41 @@ namespace RetlangTests
         public void ConcurrentQueuePointToPointPerfTestWithStruct() 
         {
             RunConcurrentQueue();
+        }
+
+        [Test, Explicit]
+        public void ConcurrentMpScQueuePointToPointPerfTestWithStruct() 
+        {
+            RunMpScQueue();
+        }
+
+        private void RunMpScQueue()
+        {
+            var executor = new MpscQueue(new PerfExecutor());
+            using (var fiber = new ThreadFiber(executor))
+            {
+                fiber.Start();
+                var channel = new Channel<MsgStruct>();
+                const int max = 5000000;
+                var reset = new AutoResetEvent(false);
+                Action<MsgStruct> onMsg = delegate(MsgStruct count)
+                {
+                    Thread.Sleep(0);
+                    if (count.count == max)
+                    {
+                        reset.Set();
+                    }
+                };
+                channel.Subscribe(fiber, onMsg);
+                using (new PerfTimer(max))
+                {
+                    for (var i = 0; i <= max; i++)
+                    {
+                        channel.Publish(new MsgStruct { count = i });
+                    }
+                    Assert.IsTrue(reset.WaitOne(30000, false));
+                }
+            }
         }
 
         private static void RunBoundedQueue()
@@ -94,6 +130,7 @@ namespace RetlangTests
                 var reset = new AutoResetEvent(false);
                 Action<MsgStruct> onMsg = delegate(MsgStruct count)
                                               {
+                                                  Thread.Sleep(0);
                                                   if (count.count == max)
                                                   {
                                                       reset.Set();
@@ -122,6 +159,7 @@ namespace RetlangTests
                 var reset = new AutoResetEvent(false);
                 Action<MsgStruct> onMsg = delegate (MsgStruct count)
                 {
+                    Thread.Sleep(0);
                     if (count.count == max) 
                     {
                         reset.Set();
