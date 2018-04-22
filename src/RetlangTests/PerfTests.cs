@@ -18,10 +18,10 @@ namespace RetlangTests
             {
                 action();
             }
-            //if (toExecute.Count < 10000)
-            //{
-            //    Thread.Sleep(1);
-            //}
+            if (toExecute.Count < 10000)
+            {
+                Thread.Sleep(1);
+            }
         }
 
         public void Execute(Action toExecute)
@@ -73,7 +73,6 @@ namespace RetlangTests
                 var reset = new AutoResetEvent(false);
                 Action<MsgStruct> onMsg = delegate(MsgStruct count)
                 {
-                    Thread.Sleep(0);
                     if (count.count == max)
                     {
                         reset.Set();
@@ -130,7 +129,6 @@ namespace RetlangTests
                 var reset = new AutoResetEvent(false);
                 Action<MsgStruct> onMsg = delegate(MsgStruct count)
                                               {
-                                                  Thread.Sleep(0);
                                                   if (count.count == max)
                                                   {
                                                       reset.Set();
@@ -159,7 +157,6 @@ namespace RetlangTests
                 var reset = new AutoResetEvent(false);
                 Action<MsgStruct> onMsg = delegate (MsgStruct count)
                 {
-                    Thread.Sleep(0);
                     if (count.count == max) 
                     {
                         reset.Set();
